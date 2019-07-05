@@ -1,0 +1,5 @@
+# 1.0.0 (2019/07/02)
+
+## New Features
+
+- Add `GdbDataRemover.py` to support drop data in GDB
