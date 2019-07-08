@@ -12,6 +12,18 @@ As GDB supports transaction, all operation in a DSL execute in the same transact
 
 The tool wil drop data with limitation (default 500) speficied by user.
 
+### Dependencies
+
+`GdbDataRemover` depends on:
+- gremlinpython
+- argparse
+- futures
+
+The following command can be used to install all of them:
+```shell
+pip install -r requirements.txt --user
+```
+
 ### Drop all vertices
 
 ```shell
