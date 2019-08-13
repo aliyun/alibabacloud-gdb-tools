@@ -69,11 +69,11 @@ wget https://raw.githubusercontent.com/krlawrence/graph/master/sample-data/air-r
 #### 导入点数据
 
 ```shell
-python GdbDataRemover.py --host ${gdb_end_point} --username ${gdb_user} --password ${gdb_pwd} --filename=air-routes-latest-nodes.csv --type node
+python GdbLoadCSV.py --host ${gdb_end_point} --username ${gdb_user} --password ${gdb_pwd} --filename=air-routes-latest-nodes.csv --type node
 ```
 
 #### 导入边数据
 
 ```shell
-python GdbDataRemover.py --host ${gdb_end_point} --username ${gdb_user} --password ${gdb_pwd} --filename=air-routes-latest-edges.csv --type edge
+python GdbLoadCSV.py --host ${gdb_end_point} --username ${gdb_user} --password ${gdb_pwd} --filename=air-routes-latest-edges.csv --type edge
 ```

@@ -67,11 +67,11 @@ wget https://raw.githubusercontent.com/krlawrence/graph/master/sample-data/air-r
 #### Load Node/Vertex Data
 
 ```shell
-python GdbDataRemover.py --host ${gdb_end_point} --username ${gdb_user} --password ${gdb_pwd} --filename=air-routes-latest-nodes.csv --type node
+python GdbLoadCSV.py --host ${gdb_end_point} --username ${gdb_user} --password ${gdb_pwd} --filename=air-routes-latest-nodes.csv --type node
 ```
 
 #### Load Edge Data
 
 ```shell
-python GdbDataRemover.py --host ${gdb_end_point} --username ${gdb_user} --password ${gdb_pwd} --filename=air-routes-latest-edges.csv --type edge
+python GdbLoadCSV.py --host ${gdb_end_point} --username ${gdb_user} --password ${gdb_pwd} --filename=air-routes-latest-edges.csv --type edge
 ```
