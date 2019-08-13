@@ -54,3 +54,26 @@ python GdbDataRemover.py --host ${gdb_end_point} --username ${gdb_user} --passwo
 ```shell
 python GdbDataRemover.py --host ${gdb_end_point} --username ${gdb_user} --password ${gdb_pwd} --edge --label knows
 ```
+
+## GdbLoadCSV
+
+### 数据准备
+
+```shell
+wget https://raw.githubusercontent.com/krlawrence/graph/master/sample-data/air-routes-latest-nodes.csv
+wget https://raw.githubusercontent.com/krlawrence/graph/master/sample-data/air-routes-latest-edges.csv
+```
+
+### 导入数据
+
+#### 导入点数据
+
+```shell
+python GdbDataRemover.py --host ${gdb_end_point} --username ${gdb_user} --password ${gdb_pwd} --filename=air-routes-latest-nodes.csv --type node
+```
+
+#### 导入边数据
+
+```shell
+python GdbDataRemover.py --host ${gdb_end_point} --username ${gdb_user} --password ${gdb_pwd} --filename=air-routes-latest-edges.csv --type edge
+```
