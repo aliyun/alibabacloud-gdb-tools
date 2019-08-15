@@ -1,0 +1,7 @@
+hosts: [ ${your_gdb_endpoint} ]
+port: 8182
+username: ${username}
+password: ${password}
+serializer: {
+        - { className: org.apache.tinkerpop.gremlin.driver.ser.GraphBinaryMessageSerializerV1 }
+}
