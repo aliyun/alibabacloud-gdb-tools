@@ -117,6 +117,7 @@ LICENSE file.
     <module>core</module>
     <module>binding-parent</module>
     <module>distribution</module>
+    <module>gremlin</module>
     <!-- all the datastore bindings, lex sorted please -->
     <module>accumulo1.6</module>
     <module>accumulo1.7</module>
