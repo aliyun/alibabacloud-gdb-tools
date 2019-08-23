@@ -35,11 +35,13 @@ fieldlength=128
 readallfields=true
 writeallfields=true
 
+insertorder=hashed
+
 readproportion=1
 updateproportion=0
 scanproportion=0
 insertproportion=0
 
 requestdistribution=uniform
-gremlin.op=EDGE
+gremlin.op=VERTEX
 
