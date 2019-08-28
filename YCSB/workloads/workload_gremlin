@@ -32,9 +32,10 @@ fieldcount=1
 # The size of each field (in bytes)
 fieldlength=128
 
-readallfields=false
-writeallfields=false
+readallfields=true
+writeallfields=true
 
+insertorder=hashed
 readproportion=1
 updateproportion=0
 scanproportion=0
