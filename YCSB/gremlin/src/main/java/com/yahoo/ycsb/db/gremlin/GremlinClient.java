@@ -21,6 +21,23 @@ import static com.yahoo.ycsb.Workload.INSERT_START_PROPERTY_DEFAULT;
  */
 public class GremlinClient extends DB {
 
+  class Session {
+    private Client client;
+    private int requestNum;
+
+    public Client getClient() {
+      return client;
+    }
+
+    public int getRequestNum() {
+      return requestNum;
+    }
+
+    public void setRequestNum(int num) {
+      requestNum = num;
+    }
+  }
+
   private static final String OPERATION_TYPE = "gremlin.op";
   private static final String DEFAULT_OP_TYPE = "VERTEX";
   private static final AtomicInteger INIT_COUNT = new AtomicInteger(0);
@@ -28,6 +45,8 @@ public class GremlinClient extends DB {
   private static NumberGenerator keyChooser = null;
   private static String type = null;
   private static int zeroPadding;
+  private static int sessionSize;
+  private static ThreadLocal<Session> sessions = new ThreadLocal<>();
 
   @Override
   public void init() throws DBException {
@@ -42,6 +61,7 @@ public class GremlinClient extends DB {
         type = getProperties().getProperty(OPERATION_TYPE, DEFAULT_OP_TYPE);
         zeroPadding = Integer.parseInt(getProperties().getProperty(CoreWorkload.ZERO_PADDING_PROPERTY,
             CoreWorkload.ZERO_PADDING_PROPERTY_DEFAULT));
+        sessionSize = Integer.parseInt(getProperties().getProperty("sessionsize", "0"));
         long lb = Long.parseLong(getProperties().getProperty(INSERT_START_PROPERTY, INSERT_START_PROPERTY_DEFAULT));
         long ub = Long.parseLong(getProperties().getProperty(com.yahoo.ycsb.Client.RECORD_COUNT_PROPERTY,
             com.yahoo.ycsb.Client.DEFAULT_RECORD_COUNT));
@@ -99,8 +119,63 @@ public class GremlinClient extends DB {
     return Status.OK;
   }
 
+  private Status insertSession(String table, String key, Map<String, ByteIterator> values) {
+    if (sessions.get() == null) {
+      try {
+        Session session = new Session();
+        session.client = Cluster.build(new File(this.getClass().getResource("/gremlin-remote.yaml").toURI()))
+            .create()
+            .connect(UUID.randomUUID().toString());
+        session.client.init();
+        sessions.set(session);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    Session session = sessions.get();
+    if (session.getRequestNum() == 0) {
+      String dsl = "g.tx().open()";
+      session.getClient().submitAsync(dsl);
+    }
+
+    session.setRequestNum(session.getRequestNum() + 1);
+
+    Map<String, Object> parameters = new HashMap<>();
+    parameters.put("LABEL", table);
+    String dsl = null;
+    if (type.equals(DEFAULT_OP_TYPE)) {
+      dsl = "g.addV(LABEL).property(id,ID)";
+      parameters.put("ID", "V_" + key);
+    } else {
+      dsl = "g.addE(LABEL).from(V(FROM_ID)).to(V(TO_ID)).property(id, ID)";
+      parameters.put("FROM_ID", "V_" + buildKeyName((long) keyChooser.nextValue()));
+      parameters.put("TO_ID", "V_" + buildKeyName((long) keyChooser.nextValue()));
+      parameters.put("ID", "E_" + key);
+    }
+    for (Map.Entry<String, ByteIterator> property : values.entrySet()) {
+      String templatePropertyKey = "PROPERTY_KEY_" + property.getKey();
+      String templatePropertyValue = "PROPERTY_VALUE_" + property.getKey();
+      dsl += String.format(".property(%s,%s)", templatePropertyKey, templatePropertyValue);
+      parameters.put(templatePropertyKey, property.getKey());
+      parameters.put(templatePropertyValue, property.getValue().toString());
+    }
+    ResultSet results = session.getClient().submit(dsl, parameters);
+
+
+    if (session.getRequestNum() == sessionSize) {
+      session.setRequestNum(0);
+      dsl = "g.tx().commit()";
+      ResultSet ret = session.getClient().submit(dsl);
+      ret.all().join();
+    }
+    return Status.OK;
+  }
+
   @Override
   public Status insert(String table, String key, Map<String, ByteIterator> values) {
+    if (sessionSize > 0) {
+      return insertSession(table, key, values);
+    }
     Map<String, Object> parameters = new HashMap<>();
     parameters.put("LABEL", table);
     String dsl = null;

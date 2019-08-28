@@ -22,18 +22,18 @@
 #   Default data size: 1 KB records (10 fields, 100 bytes each, plus key)
 #   Request distribution: zipfian
 
-recordcount=1000
-operationcount=1000
+recordcount=10000000
+operationcount=10000000
 workload=com.yahoo.ycsb.workloads.CoreWorkload
 
 # The number of fields in a record
-fieldcount=10
+fieldcount=1
 
 # The size of each field (in bytes)
 fieldlength=128
 
-readallfields=true
-writeallfields=true
+readallfields=false
+writeallfields=false
 
 readproportion=1
 updateproportion=0
@@ -41,5 +41,7 @@ scanproportion=0
 insertproportion=0
 
 requestdistribution=uniform
-gremlin.op=EDGE
+gremlin.op=VERTEX
+
+sessionsize=10
 
