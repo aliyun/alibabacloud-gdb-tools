@@ -35,6 +35,7 @@ fieldlength=128
 readallfields=false
 writeallfields=false
 
+insertorder=hashed
 readproportion=1
 updateproportion=0
 scanproportion=0

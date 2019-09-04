@@ -3,5 +3,12 @@ port: 8182
 username: ${username}
 password: ${password}
 serializer: {
-        - { className: org.apache.tinkerpop.gremlin.driver.ser.GraphBinaryMessageSerializerV1 }
+    className: org.apache.tinkerpop.gremlin.driver.ser.GraphBinaryMessageSerializerV1
 }
+connectionPool: {
+  maxSize: 128,
+  minSize: 1,
+  maxInProcessPerConnection: 8,
+  minInProcessPerConnection: 0
+}
+
