@@ -45,4 +45,4 @@ requestdistribution=uniform
 gremlin.op=VERTEX
 
 sessionsize=10
-
+sessionStaggerTime=1000

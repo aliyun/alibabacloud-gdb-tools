@@ -40,13 +40,17 @@ public class GremlinClient extends DB {
 
   private static final String OPERATION_TYPE = "gremlin.op";
   private static final String DEFAULT_OP_TYPE = "VERTEX";
+  private static final String SESSION_SIZE = "sessionsize";
+  private static final String SESSION_STAGGER_TIME = "sessionstaggertime";
   private static final AtomicInteger INIT_COUNT = new AtomicInteger(0);
   private static Client client = null;
   private static NumberGenerator keyChooser = null;
   private static String type = null;
   private static int zeroPadding;
   private static int sessionSize;
+  private static int sessionStaggerTime;
   private static ThreadLocal<Session> sessions = new ThreadLocal<>();
+  private static AtomicInteger sessionSleepTime = new AtomicInteger();
 
   @Override
   public void init() throws DBException {
@@ -61,7 +65,8 @@ public class GremlinClient extends DB {
         type = getProperties().getProperty(OPERATION_TYPE, DEFAULT_OP_TYPE);
         zeroPadding = Integer.parseInt(getProperties().getProperty(CoreWorkload.ZERO_PADDING_PROPERTY,
             CoreWorkload.ZERO_PADDING_PROPERTY_DEFAULT));
-        sessionSize = Integer.parseInt(getProperties().getProperty("sessionsize", "0"));
+        sessionSize = Integer.parseInt(getProperties().getProperty(SESSION_SIZE, "0"));
+        sessionStaggerTime = Integer.parseInt(getProperties().getProperty(SESSION_STAGGER_TIME, "1000"));
         long lb = Long.parseLong(getProperties().getProperty(INSERT_START_PROPERTY, INSERT_START_PROPERTY_DEFAULT));
         long ub = Long.parseLong(getProperties().getProperty(com.yahoo.ycsb.Client.RECORD_COUNT_PROPERTY,
             com.yahoo.ycsb.Client.DEFAULT_RECORD_COUNT));
@@ -122,6 +127,8 @@ public class GremlinClient extends DB {
   private Status insertSession(String table, String key, Map<String, ByteIterator> values) {
     if (sessions.get() == null) {
       try {
+        Thread.sleep(sessionSleepTime.getAndIncrement() * sessionStaggerTime);
+
         Session session = new Session();
         session.client = Cluster.build(new File(this.getClass().getResource("/gremlin-remote.yaml").toURI()))
             .create()
