@@ -1,0 +1,14 @@
+hosts: [ localhost ]
+username: root
+password: root
+port: 8182
+connectionPool: {
+  maxSize: 64,
+  minSize: 64,
+  maxInProcessPerConnection: 8,
+  minInProcessPerConnection: 0
+}
+serializer: {
+  className: org.apache.tinkerpop.gremlin.driver.ser.GraphBinaryMessageSerializerV1,
+  config: { serializeResultToString: false }
+}

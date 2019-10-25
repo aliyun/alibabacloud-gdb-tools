@@ -1,0 +1,8 @@
+{
+  "dslPath": "config/dsl.txt",
+  "dataPath": "config/data.csv",
+  "driverPath": "config/local.yaml",
+  "exeCount": 100000000,
+  "round": true
+}
+
