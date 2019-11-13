@@ -3,6 +3,7 @@
   "dataPath": "config/data.csv",
   "driverPath": "config/local.yaml",
   "exeCount": 100000000,
-  "round": true
+  "?generator" : "zipfian,random,sequential",
+  "generator": "zipfian"
 }
 

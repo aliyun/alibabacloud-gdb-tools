@@ -80,7 +80,7 @@ public class BenchMark {
         }
         dsl = build.toString();
 
-        reader = new DataReader(config.getDataPath(), config.getRound());
+        reader = new DataReader(config.getDataPath(), config.getGenerator());
 
         client = Cluster.build(new File(config.getDriverPath())).create().connect();
 

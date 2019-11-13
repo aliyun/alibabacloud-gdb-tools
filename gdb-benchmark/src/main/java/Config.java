@@ -4,7 +4,7 @@ public class Config {
     private String dataPath;
     private String driverPath;
     private Integer exeCount;
-    private Boolean round;
+    private String generator;
 
     public String getDslPath() {
         return dslPath;
@@ -30,19 +30,19 @@ public class Config {
         this.exeCount = exeCount;
     }
 
-    public Boolean getRound() {
-        return round;
-    }
-
-    public void setRound(Boolean round) {
-        this.round = round;
-    }
-
     public String getDriverPath() {
         return driverPath;
     }
 
     public void setDriverPath(String driverPath) {
         this.driverPath = driverPath;
+    }
+
+    public String getGenerator() {
+        return generator;
+    }
+
+    public void setGenerator(String generator) {
+        this.generator = generator;
     }
 }
