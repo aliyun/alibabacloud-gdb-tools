@@ -54,3 +54,43 @@ python GdbDataRemover.py --host ${gdb_end_point} --username ${gdb_user} --passwo
 ```shell
 python GdbDataRemover.py --host ${gdb_end_point} --username ${gdb_user} --password ${gdb_pwd} --edge --label knows
 ```
+
+## GdbLoader
+
+工具发送`GDB`的导入请求，导入用户OSS数据到`GDB`实例，主要包括以下请求：
+
+- 添加一个导入任务，导入OSS上CSV文件数据到GDB
+- 获取GDB实例的导入任务列表
+- 查询导入任务的详细信息，包括导入数据统计、错误信息等
+- 删除一个导入任务，如果要求删除的任务正在运行，会先终止任务再删除
+
+`GdbLoader`是GDB数据导入接口的简单封装，你可以作为参考集成到自己的项目中。
+
+### 添加导入任务
+
+```shell
+python GdbLoader.py --host ${gdb_end_point} --username ${gdb_user} --password ${gdb_pwd} --todo add_task --source ${source} --arn ${ramRoleArn}
+
+# or
+
+python GdbLoader.py --host ${gdb_end_point} --username ${gdb_user} --password ${gdb_pwd} --todo add_task --source ${source} --ak ${accessKey} --sk ${secretKey}
+```
+
+### 查询导入任务
+
+```shell
+python GdbLoader.py --host ${gdb_end_point} --username ${gdb_user} --password ${gdb_pwd} --todo get_task --loaderId ${uuid}
+```
+
+### 删除导入任务
+
+```shell
+python GdbLoader.py --host ${gdb_end_point} --username ${gdb_user} --password ${gdb_pwd} --todo delete_task --loaderId ${uuid}
+```
+
+### 导入任务列表
+
+```shell
+python GdbLoader.py --host ${gdb_end_point} --username ${gdb_user} --password ${gdb_pwd} --todo list_task
+```
+
