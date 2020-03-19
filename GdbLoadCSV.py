@@ -68,14 +68,9 @@ def load_edge(gdb_client, filename):
               % (GDB_LABEL, GDB_ID, GDB_FROM_ID, GDB_TO_ID)
 
     total_insert_cnt = 0
-    first_line = True
     with open(filename, mode='r') as csv_file:
         csv_reader = csv.DictReader(csv_file)
         for row in csv_reader:
-            if first_line:
-                first_line = False
-                continue
-
             if len(row) < 4 or len(row) > header_fields_cnt:
                 raise Exception("invalid line: " + row)
 
@@ -136,14 +131,9 @@ def load_node(gdb_client, filename):
     raw_dsl = "g.addV(%s).property(id, %s)" % (GDB_LABEL, GDB_ID)
 
     total_insert_cnt = 0
-    first_line = True
     with open(filename, mode='r') as csv_file:
         csv_reader = csv.DictReader(csv_file)
         for row in csv_reader:
-            if first_line:
-                first_line = False
-                continue
-
             if len(row) < 2 or len(row) > header_fields_cnt:
                 raise Exception("invalid line: " + row)
 
