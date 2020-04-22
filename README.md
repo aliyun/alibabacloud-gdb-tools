@@ -29,28 +29,33 @@ As GDB supports transaction, all operation in a DSL execute in the same transact
 
 The tool wil drop data with limitation (default 500) speficied by user.
 
+Hints for parameters below：
+
+- gdb_end_point： format looks like 'gds-xxx.graphdb.rds.aliyuncs.com'
+- gdb_port：When use internal address，port is 8182；When use public address，port is 3734
+
 #### Drop all vertices
 
 ```shell
-python GdbDataRemover.py --host ${gdb_end_point} --username ${gdb_user} --password ${gdb_pwd}
+python GdbDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd}
 ```
 
 #### Drop vertices with label `player`
 
 ```shell
-python GdbDataRemover.py --host ${gdb_end_point} --username ${gdb_user} --password ${gdb_pwd} --label player
+python GdbDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --label player
 ```
 
 #### Drop all edges
 
 ```shell
-python GdbDataRemover.py --host ${gdb_end_point} --username ${gdb_user} --password ${gdb_pwd} --edge
+python GdbDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --edge
 ```
 
 #### Drop edges with label `knows`
 
 ```shell
-python GdbDataRemover.py --host ${gdb_end_point} --username ${gdb_user} --password ${gdb_pwd} --edge --label knows
+python GdbDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --edge --label knows
 ```
 
 ## GdbLoader
