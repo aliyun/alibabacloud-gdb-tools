@@ -71,9 +71,7 @@ class GdbParallelDataRemover:
 
         labels = []
         if label is None:
-            get_labels_dsl = "g.%s()" % marker + ".group().by(label()).select(keys)"
-            result = self.__execute_dsl(get_labels_dsl, cnt_params)
-            labels = list(result[0])
+            labels = self.__get_all_labels(marker)
         else:
             labels.append(label)
         #PrintUtil.rprint(str(labels))
@@ -87,6 +85,13 @@ class GdbParallelDataRemover:
         self.workers.shutdown(wait=True)
         self.finish = 1
         self.timer.cancel()
+
+    def __get_all_labels(self, marker):
+        cnt_params = {}
+        get_labels_dsl = "g.%s()" % marker + ".groupCount().by(label)"
+        result = self.__execute_dsl(get_labels_dsl, cnt_params)
+        #PrintUtil.rprint("lables %s" % result[0].keys())
+        return result[0].keys()
 
     def __drop_by_label(self, label, drop_edge_only):
         get_ids_params = { }

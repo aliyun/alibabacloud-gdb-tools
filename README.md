@@ -33,6 +33,7 @@ Hints for parameters below：
 
 - gdb_end_point： format looks like 'gds-xxx.graphdb.rds.aliyuncs.com'
 - gdb_port：When use internal address，port is 8182；When use public address，port is 3734
+- edge: When timeout Exception during drop vertices, please try to drop edges at first by add `--edge`
 
 #### Drop all vertices
 
@@ -72,27 +73,27 @@ This tool is just a simple shell of GDB OSS Loader, you could integrate it to yo
 ### Add a new task
 
 ```shell
-python GdbLoader.py --host ${gdb_end_point} --username ${gdb_user} --password ${gdb_pwd} --todo add_task --source ${source} --arn ${ramRoleArn}
+python GdbLoader.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --todo add_task --source ${source} --arn ${ramRoleArn}
 
 # or
 
-python GdbLoader.py --host ${gdb_end_point} --username ${gdb_user} --password ${gdb_pwd} --todo add_task --source ${source} --ak ${accessKey} --sk ${secretKey}
+python GdbLoader.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --todo add_task --source ${source} --ak ${accessKey} --sk ${secretKey}
 ```
 
 ### Query the detail of task
 
 ```shell
-python GdbLoader.py --host ${gdb_end_point} --username ${gdb_user} --password ${gdb_pwd} --todo get_task --loaderId ${uuid}
+python GdbLoader.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --todo get_task --loaderId ${uuid}
 ```
 
 ### Delete one task
 
 ```shell
-python GdbLoader.py --host ${gdb_end_point} --username ${gdb_user} --password ${gdb_pwd} --todo delete_task --loaderId ${uuid}
+python GdbLoader.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --todo delete_task --loaderId ${uuid}
 ```
 
 ### List all tasks
 
 ```shell
-python GdbLoader.py --host ${gdb_end_point} --username ${gdb_user} --password ${gdb_pwd} --todo list_task
+python GdbLoader.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --todo list_task
 ```
