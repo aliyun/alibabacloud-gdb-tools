@@ -120,7 +120,7 @@ class GdbParallelDataRemover:
         marker = "E" if drop_edge_only else "V"
 
         drop_params = {}
-        batch_size = min(len(ids)/8, 64)
+        batch_size = int(max(min(len(ids)/8, 64), 1))
         drop_dsl = "g.%s(" % marker + ', '.join("id__%d" % n for n in range(0, batch_size)) + ").drop()"
         count = 0
         for nid in ids:
