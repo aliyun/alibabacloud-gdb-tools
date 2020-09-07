@@ -3,6 +3,7 @@ File: GdbLoader.py
 
 Authors:
     Liu Jianping
+    2020/9/17 - add parallelism  args
     2020/1/06 - add ak/sk args
     2019/8/13 - initial release
 """
@@ -33,11 +34,12 @@ class GdbLoader:
         if resp.status_code != 200:
            raise Exception(resp.text)
 
-    def add_task(self, source, arn, ak, sk, failOnError):
+    def add_task(self, source, arn, ak, sk, failOnError, parallelism):
         headers = {'Content-Type': 'application/json'}
         task_data = {
             'source': source,
-            'failOnError': failOnError
+            'failOnError': failOnError,
+            'parallelism': parallelism
         }
 
         if ak and sk:
@@ -67,10 +69,14 @@ def main():
     parser.add_argument('--ak', dest="ak", type=str, default="")
     parser.add_argument('--sk', dest="sk", type=str, default="")
     parser.add_argument('--failOnError', dest="failOnError", type=bool, default=False)
+    parser.add_argument('--parallelism', dest="parallelism", type=str, default="HIGH")
 
     args = parser.parse_args()
     url = 'http://' + args.host + ':' + str(args.port) + '/loader'
     gdb_loader = GdbLoader(url, args.username, args.password)
+    parallelism = set(["HIGH", "MEDIUM", "LOW"])
+    if not args.parallelism in parallelism:
+        raise Exception("unknown parallelism option: " + args.parallelism + ". set in " + ', '.join(str(e) for e in parallelism))
 
     result = {"status": "OK"}
     if args.todo == 'list_task':
@@ -86,7 +92,7 @@ def main():
     elif args.todo == 'add_task':
         if not args.source:
             raise Exception("add task should provide one oss location")
-        result = gdb_loader.add_task(args.source, args.arn, args.ak, args.sk, args.failOnError)
+        result = gdb_loader.add_task(args.source, args.arn, args.ak, args.sk, args.failOnError, args.parallelism)
     else:
         raise Exception("unknown option to do: " + args.todo)
 
