@@ -8,6 +8,7 @@ Authors:
     2019/8/13 - initial release
 """
 
+from __future__ import print_function
 import argparse
 import requests
 import json
@@ -96,7 +97,7 @@ def main():
     else:
         raise Exception("unknown option to do: " + args.todo)
 
-    print json.dumps(result, indent=2)
+    print(json.dumps(result, indent=2))
 
 if __name__ == '__main__':
     main()
