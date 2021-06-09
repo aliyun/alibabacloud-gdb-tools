@@ -61,6 +61,32 @@ python GdbDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username $
 python GdbDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --edge --label knows
 ```
 
+## GdbParallelDataRemover
+
+GdbDataRemover的并行版本。
+
+### 删除所有`Label`为`player`的点，32线程并发
+
+```shell
+python GdbParallelDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --label player --threadCnt 32
+```
+
+### 根据输入文件里的ID批量删除点，128个一批
+
+```shell
+python GdbParallelDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --threadCnt 32 --batch 128 input1.txt [input2.txt]
+```
+
+输入文件input1.txt里包含点ID列表，每行一个ID。
+
+### 根据输入文件里的ID批量删除边，128个一批
+
+```shell
+python GdbParallelDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --threadCnt 32 --edge --batch 128 input1.txt [input2.txt]
+```
+
+输入文件input1.txt里包含边ID列表，每行一个ID。
+
 ## GdbLoader
 
 工具发送`GDB`的导入请求，导入用户OSS数据到`GDB`实例，主要包括以下请求：
