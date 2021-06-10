@@ -14,6 +14,7 @@ import requests
 import json
 from requests.auth import HTTPBasicAuth
 
+
 class GdbLoader:
     def __init__(self, url, username, password):
         self.url = url
@@ -26,14 +27,14 @@ class GdbLoader:
     def get_task_detail(self, loaderId):
         resp = requests.get(self.url + '/' + loaderId, auth=self.auth)
         if resp.status_code != 200:
-           raise Exception(resp.text)
+            raise Exception(resp.text)
 
         return resp.json()[u'payload']
 
     def delete_task(self, loaderId):
         resp = requests.delete(self.url + '/' + loaderId, auth=self.auth)
         if resp.status_code != 200:
-           raise Exception(resp.text)
+            raise Exception(resp.text)
 
     def add_task(self, source, arn, ak, sk, failOnError, parallelism):
         headers = {'Content-Type': 'application/json'}
@@ -57,6 +58,7 @@ class GdbLoader:
 
         return resp.json()[u'payload']
 
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--host', dest="host", type=str, required=True)
@@ -77,7 +79,8 @@ def main():
     gdb_loader = GdbLoader(url, args.username, args.password)
     parallelism = set(["HIGH", "MEDIUM", "LOW"])
     if not args.parallelism in parallelism:
-        raise Exception("unknown parallelism option: " + args.parallelism + ". set in " + ', '.join(str(e) for e in parallelism))
+        raise Exception(
+            "unknown parallelism option: " + args.parallelism + ". set in " + ', '.join(str(e) for e in parallelism))
 
     result = {"status": "OK"}
     if args.todo == 'list_task':
@@ -99,6 +102,6 @@ def main():
 
     print(json.dumps(result, indent=2))
 
+
 if __name__ == '__main__':
     main()
-
