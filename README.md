@@ -59,6 +59,32 @@ python GdbDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username $
 python GdbDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --edge --label knows
 ```
 
+## GdbParallelDataRemover
+
+Parallel version of GdbDataRemover.
+
+### Drop vertices with label `player` using 32 concurrent threads
+
+```shell
+python GdbParallelDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --label player --threadCnt 32
+```
+
+### Drop vertices by IDs from input files, 128 vertices in a batch
+
+```shell
+python GdbParallelDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --threadCnt 32 --batch 128 input1.txt [input2.txt]
+```
+
+File input1.txt should contain a list of vertex IDs, one ID per line.
+
+### Drop edges by IDs from input files, 128 edges in a batch
+
+```shell
+python GdbParallelDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --threadCnt 32 --edge --batch 128 input1.txt [input2.txt]
+```
+
+File input1.txt should contain a list of edge IDs, one ID per line.
+
 ## GdbLoader
 
 A tool for GDB Loader which imports OSS data to GDB, it could make requests as follow:
