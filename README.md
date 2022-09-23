@@ -18,14 +18,17 @@ pip install -r requirements.txt --user
 
 ### Summary
 
-As GDB supports transaction, all operation in a DSL execute in the same transaction. If simpely run `g.V().drop()` towards an instance with lots of data, the query will fail caused by limitation of transaction buffer.
+As GDB supports transaction, all operation in a DSL execute in the same transaction. If simpely run `g.V().drop()` 
+towards an instance with lots of data, the tool will safely drop edge first and then drop vertex.
 
 `GdbDataRemover` supports four scenarios:
 
 - Drop all vertices inside GDB (Including related edges)
 - Drop vertices with specified `Label` inside GDB (Including related edges)
 - Drop all edges inside GDB
-- drop edges with specified `Label` inside GDB
+- Drop edges with specified `Label` inside GDB
+- Drop vertices vertex id in the input file 
+- Drop edges edge id in the input file
 
 The tool wil drop data with limitation (default 500) speficied by user.
 
@@ -41,38 +44,16 @@ Hints for parameters below：
 python GdbDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd}
 ```
 
-#### Drop vertices with label `player`
-
-```shell
-python GdbDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --label player
-```
-
-#### Drop all edges
-
-```shell
-python GdbDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --edge
-```
-
-#### Drop edges with label `knows`
-
-```shell
-python GdbDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --edge --label knows
-```
-
-## GdbParallelDataRemover
-
-Parallel version of GdbDataRemover.
-
 ### Drop vertices with label `player` using 32 concurrent threads
 
 ```shell
-python GdbParallelDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --label player --threadCnt 32
+python GdbDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --label player --threadCnt 32
 ```
 
 ### Drop vertices by IDs from input files, 128 vertices in a batch
 
 ```shell
-python GdbParallelDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --threadCnt 32 --batch 128 input1.txt [input2.txt]
+python GdbDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --threadCnt 32 --batch 128 input1.txt [input2.txt]
 ```
 
 File input1.txt should contain a list of vertex IDs, one ID per line.
@@ -80,7 +61,7 @@ File input1.txt should contain a list of vertex IDs, one ID per line.
 ### Drop edges by IDs from input files, 128 edges in a batch
 
 ```shell
-python GdbParallelDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --threadCnt 32 --edge --batch 128 input1.txt [input2.txt]
+python GdbDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --threadCnt 32 --edge --batch 128 input1.txt [input2.txt]
 ```
 
 File input1.txt should contain a list of edge IDs, one ID per line.
