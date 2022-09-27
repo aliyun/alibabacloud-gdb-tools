@@ -3,3 +3,9 @@
 ## New Features
 
 - Add `GdbDataRemover.py` to support drop data in GDB
+
+# 2.0.0 (2022/09/23)
+
+## New Features
+
+- Merge `GdbDataRemover.py` and `GdbDataParallelRemover.py`  to support safely drop data in TairForGDB

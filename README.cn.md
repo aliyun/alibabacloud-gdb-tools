@@ -18,7 +18,7 @@ pip install -r requirements.txt --user
 
 ### 简介
 
-`GDB`是支持事务的图数据库，单DSL中涉及的所有操作都会在同一个事务中完成。如果`GDB`实例中数据较多，简单地运行`g.V().drop()`会因为事务缓冲区大小的限制而失败。
+`GDB`是支持事务的图数据库，单DSL中涉及的所有操作都会在同一个事务中完成。如果`GDB`实例中数据较多，简单地运行`g.V().drop()`会先删边在删除点。
 
 `GdbDataRemover` 支持以下4种场景:
 
@@ -26,14 +26,18 @@ pip install -r requirements.txt --user
 - 删除`GDB`中指定`Label`的点(包括对应的边)
 - 删除`GDB`中所有的边
 - 删除`GDB`中指定`Label`的边
+- 删除`GDB`中指定的点id列表
+- 删除`GDB`中指定的边id列表 
 
-工具在删除数据时，会循环地发送请求，每个请求操作的元素个数在用户指定的限定之内(默认为`500`)。
+
+工具在删除数据时，会循环地发送请求，每个请求操作的元素个数在用户指定的限定之内(默认为`500`), 删除点逻辑为先批量删除关联表在批量删除点
 
 注意下面的参数中：
 
 - gdb_end_point： 格式类似于gds-xxx.graphdb.rds.aliyuncs.com
 - gdb_port：如果是使用GDB的内网地址，端口为8182；如果是公网地址，端口是3734
 
+## GdbDataRemover
 
 #### 删除所有的点
 
@@ -43,38 +47,17 @@ pip install -r requirements.txt --user
 python GdbDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd}
 ```
 
-#### 删除所有`Label`为`player`的点
-
-```shell
-python GdbDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --label player
-```
-
-#### 删除所有的边
-
-```shell
-python GdbDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --edge
-```
-
-#### 删除所有`Label`为`knows`的边
-
-```shell
-python GdbDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --edge --label knows
-```
-
-## GdbParallelDataRemover
-
-GdbDataRemover的并行版本。
 
 ### 删除所有`Label`为`player`的点，32线程并发
 
 ```shell
-python GdbParallelDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --label player --threadCnt 32
+python GdbDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --label player --threadCnt 32
 ```
 
 ### 根据输入文件里的ID批量删除点，128个一批
 
 ```shell
-python GdbParallelDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --threadCnt 32 --batch 128 input1.txt [input2.txt]
+python GdbDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --threadCnt 32 --batch 128 input1.txt [input2.txt]
 ```
 
 输入文件input1.txt里包含点ID列表，每行一个ID。
@@ -82,7 +65,7 @@ python GdbParallelDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --us
 ### 根据输入文件里的ID批量删除边，128个一批
 
 ```shell
-python GdbParallelDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --threadCnt 32 --edge --batch 128 input1.txt [input2.txt]
+python GdbDataRemover.py --host ${gdb_end_point} --port ${gdb_port} --username ${gdb_user} --password ${gdb_pwd} --threadCnt 32 --edge --batch 128 input1.txt [input2.txt]
 ```
 
 输入文件input1.txt里包含边ID列表，每行一个ID。
