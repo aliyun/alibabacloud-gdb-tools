@@ -106,9 +106,10 @@ class GdbParallelDataRemover:
         get_ids_params = {}
         get_ids_params["id__0"] = ""
         get_ids_params["label__0"] = label
+        get_ids_params["count"] = self.batch_size
 
         marker = "E" if drop_edge_only else "V"
-        get_ids_dsl = "g.%s()." % marker + "hasLabel(label__0).has(id, gt(id__0)).limit(2000).id()"
+        get_ids_dsl = "g.%s()." % marker + "hasLabel(label__0).has(id, gt(id__0)).limit(count).id()"
 
         while 0 == self.finish:
             ids_list = self.__execute_dsl(get_ids_dsl, get_ids_params)
